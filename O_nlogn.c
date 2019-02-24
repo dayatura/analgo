@@ -1,5 +1,17 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
+
+int* array_generator(int number){
+    int* array = malloc(sizeof(number) * number);
+
+    for(int i = 0; i < number; i++)
+    {
+        array[i] = rand() % number + 1;
+    }
+    
+    return array;
+}
 
 void merge(int arr[], int l, int m, int r) 
 { 
@@ -74,14 +86,22 @@ void mergeSort(int arr[], int l, int r)
 /* Driver program to test above functions */
 int main() 
 { 
-    int arr[] = {12, 11, 13, 5, 6, 7}; 
-    int arr_size = sizeof(arr)/sizeof(arr[0]); 
-  
-    clock_t t = clock();
-    mergeSort(arr, 0, arr_size - 1);
-    t = clock() - t; 
-  
-    printf("Time = %f ", ((double)t)/CLOCKS_PER_SEC);
+    FILE *fp;
+   fp = fopen("O_nlogn.txt","w");
+   float rata2;
+   
+   for(size_t i = 0; i < 100; i++)
+   {
+        int arr_size = 1000 * (i+1);
+        int* arr = array_generator(arr_size);
 
+        clock_t t = clock();
+        mergeSort(arr, 0, arr_size - 1);
+        t = clock() - t;
+        
+        fprintf(fp,"%i, %f\n", (int)t, ((double)t)/CLOCKS_PER_SEC);
+   }
+   
+   fclose(fp);
     return 0; 
 }

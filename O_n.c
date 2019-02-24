@@ -1,7 +1,17 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
-#include "arrayGen.h"
+int* array_generator(int number){
+    int* array = malloc(sizeof(number) * number);
+
+    for(int i = 0; i < number; i++)
+    {
+        array[i] = rand() % number + 1;
+    }
+    
+    return array;
+}
 
 float mean(int* numbers, int length){
 
@@ -16,19 +26,23 @@ float mean(int* numbers, int length){
 
 int main() {
 
-//    int arr[] = {12, 11, 13, 5, 6, 7}; 
-//    int arr_size = sizeof(arr)/sizeof(arr[0]); 
+   FILE *fp;
+   fp = fopen("O_n.txt","w");
    float rata2;
+   
+   for(size_t i = 0; i < 100; i++)
+   {
+        int arr_size = 1000 * (i+1);
+        int* arr = array_generator(arr_size);
 
-   int number = 5;
-   int* array = array_generator(number);
-   int array_size = sizeof(array)/sizeof(array[0]);
+        clock_t t = clock();
+        rata2 = mean(arr,arr_size);
+        t = clock() - t;
+        
+        fprintf(fp,"%i, %f\n", (int)t, ((double)t)/CLOCKS_PER_SEC);
+   }
    
-   clock_t t = clock();
-   rata2 = mean(array,array_size);
-   t = clock() - t;
-   
-   printf("Time = %f ", ((double)t)/CLOCKS_PER_SEC);
+   fclose(fp);
 
    return 0;
 }
